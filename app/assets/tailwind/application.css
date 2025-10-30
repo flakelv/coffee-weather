@@ -1,0 +1,81 @@
+@import "tailwindcss";
+
+/* Wave Animation */
+@keyframes wave {
+  0% {
+    transform: translateX(0) translateY(0);
+  }
+  50% {
+    transform: translateX(-25%) translateY(10px);
+  }
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.wave-animation {
+  animation: wave 20s cubic-bezier(0.36, 0.45, 0.63, 0.53) infinite;
+}
+
+.wave-animation:nth-of-type(2) {
+  animation-duration: 25s;
+  animation-delay: -5s;
+}
+
+.wave-animation:nth-of-type(3) {
+  animation-duration: 30s;
+  animation-delay: -10s;
+}
+
+/* Fade animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.fade-out {
+  animation: fadeOut 0.3s ease-out forwards;
+}
+
+/* Slide in animation for history items */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.history-item {
+  animation: slideIn 0.3s ease-out backwards;
+}
+
+.history-item:nth-child(1) { animation-delay: 0.05s; }
+.history-item:nth-child(2) { animation-delay: 0.1s; }
+.history-item:nth-child(3) { animation-delay: 0.15s; }
+.history-item:nth-child(4) { animation-delay: 0.2s; }
+.history-item:nth-child(5) { animation-delay: 0.25s; }

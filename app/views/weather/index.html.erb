@@ -1,0 +1,183 @@
+<div class="min-h-screen bg-[#f5f1e8] flex items-center justify-center p-8 relative overflow-hidden">
+<!-- Home Button -->
+<% if @current && @current['cod'] == 200 %>
+  <div class="absolute top-4 left-4">
+    <%= link_to root_path, class: "flex items-center gap-2 px-5 py-3 bg-[#e8dcc8] hover:bg-[#d4c4b0] text-[#5c4a3a] rounded-xl transition-all shadow-md hover:shadow-lg group" do %>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 group-hover:-translate-x-1 transition-transform">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+      </svg>
+      <span class="text-sm font-medium">Back</span>
+    <% end %>
+  </div>
+<% end %>
+
+<!-- Wave Background -->
+  <div class="absolute inset-0 pointer-events-none">
+    <!-- Wave 1 -->
+    <svg class="wave-animation absolute bottom-0 left-0 w-[200%] h-[70%] opacity-15" viewBox="0 0 1200 120" preserveAspectRatio="none">
+      <path d="M0,60 C300,100 600,20 900,60 C1200,100 1500,20 1800,60 L1800,120 L0,120 Z" fill="#8B6F47"/>
+    </svg>
+    
+    <!-- Wave 2 -->
+    <svg class="wave-animation absolute bottom-0 left-0 w-[200%] h-[60%] opacity-10" viewBox="0 0 1200 120" preserveAspectRatio="none">
+      <path d="M0,40 C300,80 600,0 900,40 C1200,80 1500,0 1800,40 L1800,120 L0,120 Z" fill="#6F4E37"/>
+    </svg>
+    
+    <!-- Wave 3 -->
+    <svg class="wave-animation absolute bottom-0 left-0 w-[200%] h-[50%] opacity-8" viewBox="0 0 1200 120" preserveAspectRatio="none">
+      <path d="M0,80 C300,100 600,60 900,80 C1200,100 1500,60 1800,80 L1800,120 L0,120 Z" fill="#5c4a3a"/>
+    </svg>
+  </div>
+  
+  <div class="w-full max-w-2xl relative z-10" data-controller="search-history">
+    
+    <!-- Search Form -->
+    <%= form_with url: weather_search_path, method: :get, class: "mb-8", data: { action: "submit->search-history#saveSearch" } do |f| %>
+      <div class="flex gap-3">
+        <%= f.text_field :city, 
+            placeholder: "Enter city name...", 
+            class: "flex-1 px-8 py-6 text-2xl rounded-2xl bg-[#e8dcc8] text-[#5c4a3a] placeholder-[#9c8672] focus:outline-none focus:ring-4 focus:ring-[#d4c4b0] transition-all",
+            value: @city,
+            required: true,
+            minlength: 2,
+            autofocus: true,
+            data: { search_history_target: "input" } %>
+        <button type="submit" class="px-8 py-6 text-xl bg-[#c9b59a] text-[#3d2f23] rounded-2xl hover:bg-[#b8a489] hover:shadow-lg active:scale-95 transition-all cursor-pointer font-medium flex items-center gap-2">
+          <!-- Heroicons -->
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+          </svg>
+          Search
+        </button>
+      </div>
+    <% end %>
+    
+    <!-- Error Message -->
+    <% if @error.present? %>
+      <div class="mb-8 p-6 bg-[#d4baa0] border-2 border-[#9c8672] rounded-2xl fade-in">
+        <p class="text-[#3d2f23] text-lg text-center"><%= @error %></p>
+      </div>
+    <% end %>
+
+    <!-- Search History -->
+    <% if @current.nil? || @current['cod'] != 200 %>
+      <div class="mb-8" data-search-history-target="container">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-medium text-[#5c4a3a] flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-[#7a6552]">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            Recent Searches
+          </h3>
+          <button 
+            type="button"
+            data-action="click->search-history#clearHistory"
+            class="text-sm text-[#7a6552] hover:text-[#5c4a3a] transition-colors underline"
+          >
+            Clear
+          </button>
+        </div>
+        <div class="space-y-2" data-search-history-target="historyList">
+          <!-- search_history_controller.js -->
+        </div>
+      </div>
+    <% end %>
+
+    <!-- Weather Display -->
+    <% if @current && @current['cod'] == 200 %>
+      <div class="text-center fade-in">
+        <!-- City Name -->
+        <div class="flex items-center justify-center gap-2 mb-6">
+          <!-- Location pin icon from Heroicons -->
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-[#7a6552]">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+          </svg>
+          <h1 class="text-2xl font-medium text-[#5c4a3a]"><%= @current['name'] %>, <%= @current['sys']['country'] %></h1>
+        </div>
+        
+        <!-- Current Temperature -->
+        <div class="mb-10">
+          <% icon_code = @current['weather'].first['icon'] %>
+          <img src="https://openweathermap.org/img/wn/<%= icon_code %>@4x.png" 
+               alt="<%= @current['weather'].first['description'] %>"
+               class="w-40 h-40 mx-auto mb-4 drop-shadow-lg">
+          
+          <div class="flex items-start justify-center mb-3">
+            <h2 class="text-8xl font-light text-[#3d2f23]">
+              <%= @current['main']['temp'].round %>
+            </h2>
+            <span class="text-5xl font-light text-[#3d2f23] mt-2">°</span>
+          </div>
+          <p class="text-3xl text-[#5c4a3a] capitalize mb-2">
+            <%= @current['weather'].first['description'] %>
+          </p>
+          <p class="text-xl text-[#7a6552]">
+            Feels like <%= @current['main']['feels_like'].round %>°C
+          </p>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-2 gap-5 mb-10">
+          <div class="bg-[#e8dcc8] p-6 rounded-2xl hover:bg-[#d4c4b0] hover:shadow-lg transition-all cursor-default">
+            <div class="flex items-center gap-2 mb-2">
+              <!-- Droplet icon from Heroicons -->
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-[#7a6552]">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 2.25c3.75 3.75 7.5 7.5 7.5 11.25a7.5 7.5 0 1 1-15 0c0-3.75 3.75-7.5 7.5-11.25Z" />
+              </svg>
+              <p class="text-base text-[#7a6552]">Humidity</p>
+            </div>
+            <p class="text-3xl font-medium text-[#3d2f23]"><%= @current['main']['humidity'] %>%</p>
+          </div>
+          <div class="bg-[#e8dcc8] p-6 rounded-2xl hover:bg-[#d4c4b0] hover:shadow-lg transition-all cursor-default">
+            <div class="flex items-center gap-2 mb-2">
+              <!-- Wind icon from Heroicons -->
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-[#7a6552]">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 10.5h3m12 0h3M3 15h3m12 0h3M3 6h9m0 0a3 3 0 1 1 0 6M12 6a3 3 0 1 0 0 6m-9 12h3m12 0h3M3 19.5h9m0 0a3 3 0 0 1 0-6m0 6a3 3 0 0 0 0-6" />
+              </svg>
+              <p class="text-base text-[#7a6552]">Wind</p>
+            </div>
+            <p class="text-3xl font-medium text-[#3d2f23]"><%= @current['wind']['speed'].round(1) %> m/s</p>
+          </div>
+        </div>
+
+        <!-- Forecast -->
+        <div class="space-y-3">
+          <p class="text-lg text-[#7a6552] mb-4 font-medium">Next 24 Hours</p>
+          <% @forecast&.each_with_index do |period, index| %>
+            <% time = Time.at(period['dt']) %>
+            <% is_tomorrow = time.day != Time.now.day %>
+            <% forecast_icon = period['weather'].first['icon'] %>
+            <div class="flex justify-between items-center bg-[#e8dcc8] p-5 rounded-2xl hover:bg-[#d4c4b0] hover:shadow-lg hover:scale-[1.02] transition-all cursor-pointer group">
+              <div class="w-28">
+                <span class="text-base text-[#5c4a3a] font-medium block">
+                  <%= time.strftime('%I:%M %p') %>
+                </span>
+                <% if is_tomorrow && index == @forecast.find_index { |p| Time.at(p['dt']).day != Time.now.day } %>
+                  <span class="text-xs text-[#9c8672]">Tomorrow</span>
+                <% end %>
+              </div>
+              <div class="flex items-center gap-3 flex-1 justify-center">
+                <img src="https://openweathermap.org/img/wn/<%= forecast_icon %>@2x.png" 
+                     alt="<%= period['weather'].first['description'] %>"
+                     class="w-12 h-12 drop-shadow">
+                <span class="capitalize text-base text-[#7a6552] group-hover:text-[#5c4a3a] transition-colors">
+                  <%= period['weather'].first['description'] %>
+                </span>
+              </div>
+              <div class="w-20 text-right">
+                <span class="font-semibold text-xl text-[#3d2f23] block">
+                  <%= period['main']['temp'].round %>°C
+                </span>
+                <span class="text-sm text-[#9c8672]">
+                  <%= period['main']['feels_like'].round %>°
+                </span>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+  </div>
+</div>
