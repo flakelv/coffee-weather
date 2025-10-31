@@ -2,7 +2,7 @@ class WeatherService
     BASE_URL = "https://api.openweathermap.org/data/2.5"
 
   def self.fetch_weather(city)
-    api_key = Rails.application.credentials.openweather_api_key
+    api_key = ENV['OPENWEATHER_API_KEY']
     encoded_city = CGI.escape(city)
 
     current_url = "#{BASE_URL}/weather?q=#{encoded_city}&appid=#{api_key}&units=metric"
