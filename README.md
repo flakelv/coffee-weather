@@ -19,7 +19,11 @@ A modern, responsive weather application built with Ruby on Rails 8.0. Search fo
 
 ## Screenshots
 
-*Add screenshots of your application here*
+<img width="1916" height="947" alt="image" src="https://github.com/user-attachments/assets/acb7b14b-c30c-437d-8ac2-abd6a7a52de2" />
+
+<img width="1903" height="949" alt="image" src="https://github.com/user-attachments/assets/aa493254-1b58-4d24-ad84-a6181db87bb5" />
+
+<img width="1915" height="947" alt="image" src="https://github.com/user-attachments/assets/91eae3d1-52f0-4377-8c47-1f9b0be8519f" />
 
 ## Tech Stack
 
