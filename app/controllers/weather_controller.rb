@@ -10,36 +10,36 @@ class WeatherController < ApplicationController
       render :index
       return
     end
-    
+
     if city.length < 2
       @error = "City name must be at least 2 characters"
       render :index
       return
     end
-    
+
     begin
       weather_data = WeatherService.fetch_weather(city)
-      
+
       @city = city
       @current = weather_data[:current]
-      @forecast = weather_data[:forecast]['list']&.first(8)
-      
+      @forecast = weather_data[:forecast]["list"]&.first(8)
+
       # Check if API returned an error
-      if @current['cod'].to_i != 200
-        @error = case @current['cod'].to_i
-                 when 404
+      if @current["cod"].to_i != 200
+        @error = case @current["cod"].to_i
+        when 404
                    "City not found. Please check the spelling and try again."
-                 when 401
+        when 401
                    "API key error. Please contact support."
-                 else
+        else
                    "Unable to fetch weather data. Please try again later."
-                 end
+        end
       end
     rescue StandardError => e
       @error = "Network error. Please check your connection and try again."
       Rails.logger.error "Weather API Error: #{e.message}"
     end
-    
+
     render :index
   end
 end
