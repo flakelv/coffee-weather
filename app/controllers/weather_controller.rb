@@ -2,6 +2,20 @@ class WeatherController < ApplicationController
   def index
   end
 
+  def autocomplete
+    query = params[:q]
+
+    # Ensure query is present and has minimum length
+    if query.blank? || query.strip.length < 2
+      render json: []
+      return
+    end
+
+    suggestions = WeatherService.fetch_city_suggestions(query, limit: 5)
+
+    render json: suggestions.as_json
+  end
+
   def search
     city = params[:city]
 
