@@ -22,7 +22,6 @@ class WeatherService
     api_key = ENV["OPENWEATHER_API_KEY"]
     return [] if query.blank? || query.length < 2
 
-    # Normalize query: trim and replace multiple spaces with single space
     normalized_query = query.strip.gsub(/\s+/, " ")
     return [] if normalized_query.length < 2
 
@@ -45,7 +44,7 @@ class WeatherService
       end
     end
 
-    # If no results and query has spaces, try searching with just the first word
+    # If no results and query has spaces, searching with just the first word
     if suggestions.empty? && normalized_query.include?(" ")
       first_word = normalized_query.split(" ").first
       return [] if first_word.length < 2
@@ -57,8 +56,6 @@ class WeatherService
       fallback_parsed = fallback_response.parsed_response
 
       if fallback_parsed.is_a?(Array)
-        # Filter results to only include cities that start with the first word
-        # and potentially match the second word
         filtered_suggestions = fallback_parsed.select do |city_data|
           city_name = city_data["name"]&.downcase || ""
           query_words = normalized_query.downcase.split(" ")

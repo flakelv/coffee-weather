@@ -26,7 +26,6 @@ export default class extends Controller {
     
     localStorage.setItem('weatherSearchHistory', JSON.stringify(history))
     
-    // Only display history if the target exists (when not showing weather results)
     if (this.hasHistoryListTarget) {
       this.displayHistory()
     }
@@ -40,7 +39,6 @@ export default class extends Controller {
   displayHistory() {
     const history = this.getHistory()
     
-    // If historyList target doesn't exist (e.g., when weather results are displayed), return early
     if (!this.hasHistoryListTarget) {
       return
     }
@@ -96,7 +94,6 @@ export default class extends Controller {
   }
 
   loadHistory() {
-    // Only load history if the target exists (when not showing weather results)
     if (this.hasHistoryListTarget) {
       this.displayHistory()
     }
@@ -117,7 +114,6 @@ export default class extends Controller {
       history.splice(index, 1)
       localStorage.setItem('weatherSearchHistory', JSON.stringify(history))
       
-      // Only display history if the target exists (when not showing weather results)
       if (this.hasHistoryListTarget) {
         this.displayHistory()
       }
@@ -127,7 +123,6 @@ export default class extends Controller {
   clearHistory() {
     localStorage.removeItem('weatherSearchHistory')
     
-    // Only display history if the target exists (when not showing weather results)
     if (this.hasHistoryListTarget) {
       this.displayHistory()
     }
